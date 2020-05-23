@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 
 public class WebdataManager : MonoBehaviour
 {
-    private string WebProcessingPageAddress = "http://localhost/OddOneIn/oddonein.php"; // CHANGE THIS TO YOUR WEB ADDRESS>....
+    private string WebProcessingPageAddress = "http://localhost:8080/OddOneIn/oddonein.php"; // CHANGE THIS TO YOUR WEB ADDRESS>....
     
     /* 
     <Variable Name> WebResponse
