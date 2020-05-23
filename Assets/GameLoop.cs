@@ -186,8 +186,9 @@ public class GameLoop : MonoBehaviour
         string response = DbManager.GetAllHighScores();
         Debug.Log("RESPONSE IS "+ response);
         //DbManager.ClearWebResponse();
-
+        //Send the data we got from the page to be "prepared" for display.
         ParseScoreData(response);
+        //Populate the leaderboard.
         PopulateLeaderboard();
 
 
@@ -197,30 +198,47 @@ public class GameLoop : MonoBehaviour
     {
         foreach(Score score in PlayerScores)
         {
+            //We create a prefab of a players score to display in the list. 
             GameObject PlayerPrefab = Instantiate(HighscorePrefab, LeaderboardDisplay.position, Quaternion.identity);
+            //This will access the 2 text components which display name and score.
             Text[] PrefabTexts = PlayerPrefab.GetComponentsInChildren<Text>();
+            // Update the prefab text id.
             PrefabTexts[0].text = score.id;
+            //Update the prefab score text component and convert to a string.
             PrefabTexts[1].text = score.playerscore.ToString();
+            //Parent this to the "leaderboard"
             PlayerPrefab.transform.SetParent(LeaderboardDisplay.transform);
         }
     }
 
-
+    //This function splits the data we receive from the PHP page into rows.
     public void ParseScoreData(string scoredata)
     {
-        
+        //Split all the string by # this will give us a dynamic array of strings. 
         string[] scores = scoredata.Split('#');
-
+        /*
+        EXAMPLE :
+        id score #  id score # id score 
+        will become 
+        id score # 
+        id score # 
+        id score
+        */
         foreach(string RowOfData in scores)
                 {
                     if(RowOfData != "")
                     {
                         
                         string[] ScoreRow;
+                        //Split the RowOfData by -
                         ScoreRow = RowOfData.Split('-');
+                        //Create a new score object.
                         Score newScoreData = new Score();
+                        //Assign this Score ID to the 1st segment of the row of data this will be the ID from the DB
                         newScoreData.id = ScoreRow[0];
+                        //Assign the score to the player and convert it to an integer.
                         newScoreData.playerscore = Convert.ToInt64(ScoreRow[1]);
+                        //Save this score in the newScoreData
                         PlayerScores.Add(newScoreData);
                     }
      
